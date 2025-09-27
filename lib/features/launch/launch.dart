@@ -49,7 +49,7 @@ class LaunchPage extends StatelessWidget {
 
                   // Subtitle
                   const Text(
-                    'Lorem ipsum dolor sit amet, consectetur\nadipiscing elit, sed do eiusmod.',
+                    'Ứng dụng tài chính thông minh dành cho bạn.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 14,
@@ -77,7 +77,7 @@ class LaunchPage extends StatelessWidget {
                   elevation: 0,
                 ),
                 child: const Text(
-                  'Log In',
+                  'Đăng nhập',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ),
@@ -87,7 +87,7 @@ class LaunchPage extends StatelessWidget {
               // Sign Up Button
               ElevatedButton(
                 onPressed: () {
-                  // Handle sign up
+                  Navigator.pushReplacementNamed(context, AppRoutes.signup);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFB8E6D3), // Light teal
@@ -99,7 +99,7 @@ class LaunchPage extends StatelessWidget {
                   elevation: 0,
                 ),
                 child: const Text(
-                  'Sign Up',
+                  'Đăng ký',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ),
@@ -112,7 +112,7 @@ class LaunchPage extends StatelessWidget {
                   // Handle forgot password
                 },
                 child: const Text(
-                  'Forgot Password?',
+                  'Quên mật khẩu?',
                   style: TextStyle(
                     fontSize: 14,
                     color: Color(0xFF333333),

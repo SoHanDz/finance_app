@@ -36,17 +36,36 @@ class _LoginPageState extends State<LoginPage> {
                 bottomRight: Radius.circular(30),
               ),
             ),
-            child: const SafeArea(
-              child: Center(
-                child: Text(
-                  'Welcome',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+            child: Column(
+              children: [
+                const SizedBox(height: 56),
+                Container(
+                  width: 80,
+                  height: 80,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFFFFFFF), // Teal color
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.trending_up,
+                    color: Color(0xFF00D4AA),
+                    size: 40,
                   ),
                 ),
-              ),
+
+                const SizedBox(height: 16),
+
+                // App Name
+                const Text(
+                  'FinWise',
+                  style: TextStyle(
+                    fontSize: 36,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFFFFFFF),
+                  ),
+                ),
+                const SizedBox(height: 8),
+              ],
             ),
           ),
 
@@ -63,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
 
                   // Username/Email field
                   const Text(
-                    'Username Or Email',
+                    'Tên người dùng hoặc Email',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -97,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
 
                   // Password field
                   const Text(
-                    'Password',
+                    'Mật khẩu',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -149,7 +168,7 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () {
                       Navigator.pushReplacementNamed(
                         context,
-                        AppRoutes.dashboard,
+                        AppRoutes.home,
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -162,7 +181,7 @@ class _LoginPageState extends State<LoginPage> {
                       elevation: 0,
                     ),
                     child: const Text(
-                      'Log In',
+                      'Đăng nhập',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -178,7 +197,7 @@ class _LoginPageState extends State<LoginPage> {
                       // Handle forgot password
                     },
                     child: const Text(
-                      'Forgot Password?',
+                      'Quên mật khẩu?',
                       style: TextStyle(
                         fontSize: 14,
                         color: Color(0xFF333333),
@@ -192,7 +211,10 @@ class _LoginPageState extends State<LoginPage> {
                   // Sign Up Button
                   ElevatedButton(
                     onPressed: () {
-                      // Handle sign up
+                      Navigator.pushReplacementNamed(
+                        context,
+                        AppRoutes.signup,
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFB8E6D3),
@@ -204,7 +226,7 @@ class _LoginPageState extends State<LoginPage> {
                       elevation: 0,
                     ),
                     child: const Text(
-                      'Sign Up',
+                      'Đăng ký',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -213,35 +235,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
 
                   const SizedBox(height: 24),
-
-                  // Fingerprint text
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Text(
-                        'Use ',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFF666666),
-                        ),
-                      ),
-                      Text(
-                        'Fingerprint',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFF007AFF),
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Text(
-                        ' To Access',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFF666666),
-                        ),
-                      ),
-                    ],
-                  ),
 
                   const SizedBox(height: 8),
                 ],
