@@ -73,16 +73,16 @@ class _MainLayoutState extends State<MainLayout> {
   void _onTabTapped(int index) {
     switch (index) {
       case 0:
-        Navigator.pushReplacementNamed(context, AppRoutes.home);
+        Navigator.pushNamed(context, AppRoutes.home);
         break;
       case 1:
-        Navigator.pushReplacementNamed(context, AppRoutes.transactions);
+        Navigator.pushNamed(context, AppRoutes.transactions);
         break;
       case 2:
-        // Navigate to analytics page
+        Navigator.pushNamed(context, AppRoutes.statistics);
         break;
       case 3:
-        // Navigate to profile page
+        Navigator.pushNamed(context, AppRoutes.profile);
         break;
     }
   }

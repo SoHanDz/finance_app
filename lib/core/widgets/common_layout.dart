@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:finance_app/core/config/app_router.dart';
 
 class CommonLayout extends StatelessWidget {
   final Widget child;
@@ -46,9 +47,9 @@ class CommonLayout extends StatelessWidget {
             )
           : null,
       title: Align(
-        alignment: Alignment.center,
+        alignment: Alignment.centerLeft,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               title,
@@ -76,7 +77,7 @@ class CommonLayout extends StatelessWidget {
             child: CircleAvatar(
               radius: 20,
               backgroundColor: Colors.white,
-              child: IconButton(onPressed: () {}, icon: const Icon(Icons.notifications)),
+              child: IconButton(onPressed: () {Navigator.pushNamed(context, AppRoutes.notifications);}, icon: const Icon(Icons.notifications)),
             )
           )
         ],
