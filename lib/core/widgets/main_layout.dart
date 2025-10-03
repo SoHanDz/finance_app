@@ -5,11 +5,7 @@ class MainLayout extends StatefulWidget {
   final Widget child;
   final int currentIndex;
 
-  const MainLayout({
-    super.key,
-    required this.child,
-    this.currentIndex = 0,
-  });
+  const MainLayout({super.key, required this.child, this.currentIndex = 0});
 
   @override
   State<MainLayout> createState() => _MainLayoutState();
@@ -73,7 +69,7 @@ class _MainLayoutState extends State<MainLayout> {
   void _onTabTapped(int index) {
     switch (index) {
       case 0:
-        Navigator.pushNamed(context, AppRoutes.home);
+        Navigator.pushReplacementNamed(context, AppRoutes.home);
         break;
       case 1:
         Navigator.pushNamed(context, AppRoutes.transactions);
