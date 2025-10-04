@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
-import 'core/config/app_router.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
+import 'core/config/app_router.dart';
 import 'firebase_options.dart';
+import 'features/transactions/presentation/providers/transaction_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
-    name: 'name-here', //tránh bị trùng instance
+    name: 'name-here',
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // Sign in anonymously nếu chưa có user
+  if (FirebaseAuth.instance.currentUser == null) {
+    await FirebaseAuth.instance.signInAnonymously();
+  }
 
   runApp(const MyApp());
 }
@@ -19,11 +27,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Finance Manager',
-      initialRoute: AppRoutes.launch, // Trang bắt đầu
-      routes: AppRoutes.routes,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => TransactionProvider(),
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Finance Manager',
+        initialRoute: AppRoutes.launch,
+        routes: AppRoutes.routes,
+      ),
     );
   }
 }

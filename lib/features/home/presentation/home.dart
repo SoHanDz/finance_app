@@ -167,7 +167,7 @@ class HomePage extends StatelessWidget {
                 'Giao dịch',
                 Icons.add_circle_outline,
                 const Color(0xFF00D4AA),
-                () => Navigator.pushNamed(context, AppRoutes.transactions),
+                () => Navigator.pushNamed(context, AppRoutes.addTransaction),
               ),
             ),
             const SizedBox(width: 12),
