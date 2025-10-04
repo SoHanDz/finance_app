@@ -4,80 +4,111 @@ import 'package:finance_app/core/config/app_router.dart';
 import 'package:finance_app/core/widgets/common_layout.dart';
 import 'package:finance_app/core/widgets/content_container.dart';
 import 'package:finance_app/core/widgets/main_layout.dart';
+import 'package:provider/provider.dart';
 
-class HomePage extends StatelessWidget {
+import 'package:finance_app/features/transactions/presentation/providers/transaction_provider.dart';
+
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    _loadTransactions();
+  }
+
+  Future<void> _loadTransactions() async {
+    final provider = Provider.of<TransactionProvider>(context, listen: false);
+    await provider.getTransactions();
+    ();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return MainLayout(
-      currentIndex: 0, // Dashboard tab
-      child: CommonLayout(
-        title: "Chào mừng trở lại👋",
-        child: Column(
-          children: [
-            // Balance Card Section
-            Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: _buildBalanceCard(),
-            ),
-            
-            // Content Section
-            Expanded(
-              child: ContentContainer(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Quick Actions
-                      _buildQuickActions(context),
-                      
-                      const SizedBox(height: 24),
-                      
-                      // Recent Transactions
-                      _buildRecentTransactions(context),
-                      
-                      const SizedBox(height: 24),
-                      
-                      // Financial Overview
-                      _buildFinancialOverview(),
-                    ],
+    return Consumer<TransactionProvider>(
+      builder: (context, provider, child) {
+        return MainLayout(
+          currentIndex: 0, // Dashboard tab
+          child: CommonLayout(
+            title: "Chào mừng trở lại👋",
+            child: Column(
+              children: [
+                // Balance Card Section
+                Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: _buildBalanceCard(provider),
+                ),
+
+                // Content Section
+                Expanded(
+                  child: ContentContainer(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Quick Actions
+                          _buildQuickActions(context),
+
+                          const SizedBox(height: 24),
+
+                          // Recent Transactions
+                          _buildRecentTransactions(context),
+
+                          const SizedBox(height: 24),
+
+                          // Financial Overview
+                          _buildFinancialOverview(),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildBalanceCard() {
+  String _formatCurrency(double amount) {
+    return amount
+        .toStringAsFixed(0)
+        .replaceAllMapped(
+          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+          (Match m) => '${m[1]}.',
+        );
+  }
+
+  Widget _buildBalanceCard(TransactionProvider provider) {
+    final balance = provider.balance;
+    final totalIncome = provider.totalIncome;
+    final totalExpense = provider.totalExpense;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.2),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.3),
-          width: 1,
-        ),
+        border: Border.all(color: Colors.white.withOpacity(0.3), width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
             'Số dư hiện tại',
-            style: TextStyle(
-              color: Colors.white70,
-              fontSize: 14,
-            ),
+            style: TextStyle(color: Colors.white70, fontSize: 14),
           ),
           const SizedBox(height: 8),
-          const Text(
-            '₫25,450,000',
-            style: TextStyle(
+          Text(
+            '₫${_formatCurrency(balance)}',
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 32,
               fontWeight: FontWeight.bold,
@@ -89,7 +120,7 @@ class HomePage extends StatelessWidget {
               Expanded(
                 child: _buildBalanceItem(
                   'Thu nhập',
-                  '₫15,200,000',
+                  '₫${_formatCurrency(totalIncome)}',
                   Icons.arrow_upward,
                   Colors.green.shade300,
                 ),
@@ -98,7 +129,7 @@ class HomePage extends StatelessWidget {
               Expanded(
                 child: _buildBalanceItem(
                   'Chi tiêu',
-                  '₫8,750,000',
+                  '₫${_formatCurrency(totalExpense)}',
                   Icons.arrow_downward,
                   Colors.red.shade300,
                 ),
@@ -110,7 +141,12 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildBalanceItem(String label, String amount, IconData icon, Color color) {
+  Widget _buildBalanceItem(
+    String label,
+    String amount,
+    IconData icon,
+    Color color,
+  ) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -126,10 +162,7 @@ class HomePage extends StatelessWidget {
               const SizedBox(width: 4),
               Text(
                 label,
-                style: const TextStyle(
-                  color: Colors.white70,
-                  fontSize: 12,
-                ),
+                style: const TextStyle(color: Colors.white70, fontSize: 12),
               ),
             ],
           ),
@@ -198,7 +231,12 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildQuickActionCard(String title, IconData icon, Color color, VoidCallback onTap) {
+  Widget _buildQuickActionCard(
+    String title,
+    IconData icon,
+    Color color,
+    VoidCallback onTap,
+  ) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -222,11 +260,7 @@ class HomePage extends StatelessWidget {
                 color: color.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(
-                icon,
-                color: color,
-                size: 24,
-              ),
+              child: Icon(icon, color: color, size: 24),
             ),
             const SizedBox(height: 8),
             Text(
@@ -260,7 +294,8 @@ class HomePage extends StatelessWidget {
               ),
             ),
             TextButton(
-              onPressed: () => Navigator.pushNamed(context, AppRoutes.transactions),
+              onPressed: () =>
+                  Navigator.pushNamed(context, AppRoutes.transactions),
               child: const Text(
                 'Xem tất cả',
                 style: TextStyle(
@@ -272,16 +307,36 @@ class HomePage extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 12),
-        _buildTransactionItem('Ăn sáng', 'Cà phê Highlands', '-₫85,000', Icons.restaurant),
-        _buildTransactionItem('Lương tháng 10', 'Công ty ABC', '+₫15,000,000', Icons.work),
-        _buildTransactionItem('Xăng xe', 'Petrolimex', '-₫450,000', Icons.local_gas_station),
+        _buildTransactionItem(
+          'Ăn sáng',
+          'Cà phê Highlands',
+          '-₫85,000',
+          Icons.restaurant,
+        ),
+        _buildTransactionItem(
+          'Lương tháng 10',
+          'Công ty ABC',
+          '+₫15,000,000',
+          Icons.work,
+        ),
+        _buildTransactionItem(
+          'Xăng xe',
+          'Petrolimex',
+          '-₫450,000',
+          Icons.local_gas_station,
+        ),
       ],
     );
   }
 
-  Widget _buildTransactionItem(String category, String description, String amount, IconData icon) {
+  Widget _buildTransactionItem(
+    String category,
+    String description,
+    String amount,
+    IconData icon,
+  ) {
     final bool isIncome = amount.startsWith('+');
-    
+
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
@@ -304,11 +359,7 @@ class HomePage extends StatelessWidget {
               color: const Color(0xFF00D4AA).withOpacity(0.1),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(
-              icon,
-              color: const Color(0xFF00D4AA),
-              size: 20,
-            ),
+            child: Icon(icon, color: const Color(0xFF00D4AA), size: 20),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -384,7 +435,12 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildOverviewCard(String title, String value, IconData icon, Color color) {
+  Widget _buildOverviewCard(
+    String title,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -407,19 +463,12 @@ class HomePage extends StatelessWidget {
               color: color.withOpacity(0.1),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(
-              icon,
-              color: color,
-              size: 20,
-            ),
+            child: Icon(icon, color: color, size: 20),
           ),
           const SizedBox(height: 12),
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 14,
-              color: Color(0xFF666666),
-            ),
+            style: const TextStyle(fontSize: 14, color: Color(0xFF666666)),
           ),
           const SizedBox(height: 4),
           Text(

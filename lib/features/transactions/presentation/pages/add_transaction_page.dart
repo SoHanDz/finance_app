@@ -17,7 +17,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
   final _amountController = TextEditingController();
   final _descriptionController = TextEditingController();
   late final TransactionProvider _provider;
-  
+
   bool isIncome = false;
   String? selectedCategory;
   String? selectedIconName;
@@ -112,7 +112,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
     try {
       // Parse amount
       final amount = double.parse(_amountController.text.replaceAll(',', ''));
-      
+
       // Combine date and time
       final dateTime = DateTime(
         selectedDate.year,
@@ -150,7 +150,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       }
     } catch (e) {
       if (!mounted) return;
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Lỗi: ${e.toString()}'),
@@ -185,7 +185,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
               child: ContentContainer(
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.all(24.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Form(
                       key: _formKey,
                       child: Column(
@@ -232,10 +232,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.2),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.3),
-          width: 1,
-        ),
+        border: Border.all(color: Colors.white.withOpacity(0.3), width: 1),
       ),
       child: Row(
         children: [
@@ -251,9 +248,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
-                  color: !isIncome
-                      ? Colors.white
-                      : Colors.transparent,
+                  color: !isIncome ? Colors.white : Colors.transparent,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
@@ -290,9 +285,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
-                  color: isIncome
-                      ? Colors.white
-                      : Colors.transparent,
+                  color: isIncome ? Colors.white : Colors.transparent,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
@@ -494,9 +487,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
             maxLines: 3,
             decoration: InputDecoration(
               hintText: 'Nhập mô tả chi tiết...',
-              hintStyle: TextStyle(
-                color: Colors.grey.shade400,
-              ),
+              hintStyle: TextStyle(color: Colors.grey.shade400),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide.none,
