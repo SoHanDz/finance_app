@@ -62,25 +62,28 @@ class CommonLayout extends StatelessWidget {
             if (subtitle != null)
               Text(
                 subtitle!,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.blueGrey,
-                ),
-              )
+                style: const TextStyle(fontSize: 14, color: Colors.blueGrey),
+              ),
           ],
         ),
       ),
-      actions: actions ??
-        [
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: CircleAvatar(
-              radius: 20,
-              backgroundColor: Colors.white,
-              child: IconButton(onPressed: () {Navigator.pushNamed(context, AppRoutes.notifications);}, icon: const Icon(Icons.notifications)),
-            )
-          )
-        ],
+      actions:
+          actions ??
+          [
+            Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: CircleAvatar(
+                radius: 20,
+                backgroundColor: Colors.white,
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, AppRoutes.notifications);
+                  },
+                  icon: const Icon(Icons.notifications),
+                ),
+              ),
+            ),
+          ],
     );
   }
 }

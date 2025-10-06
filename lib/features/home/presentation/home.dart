@@ -22,6 +22,29 @@ class _HomePageState extends State<HomePage> {
     _loadTransactions();
   }
 
+  IconData _getIconData(String iconName) {
+    final iconMap = {
+      'restaurant': Icons.restaurant,
+      'shopping_cart': Icons.shopping_cart,
+      'local_gas_station': Icons.local_gas_station,
+      'electrical_services': Icons.electrical_services,
+      'water_drop': Icons.water_drop,
+      'home': Icons.home,
+      'medical_services': Icons.medical_services,
+      'school': Icons.school,
+      'movie': Icons.movie,
+      'flight_takeoff': Icons.flight_takeoff,
+      'shopping_bag': Icons.shopping_bag,
+      'work': Icons.work,
+      'card_giftcard': Icons.card_giftcard,
+      'computer': Icons.computer,
+      'trending_up': Icons.trending_up,
+      'sell': Icons.sell,
+      'more_horiz': Icons.more_horiz,
+    };
+    return iconMap[iconName] ?? Icons.more_horiz;
+  }
+
   Future<void> _loadTransactions() async {
     final provider = Provider.of<TransactionProvider>(context, listen: false);
     await provider.getTransactions();
@@ -103,7 +126,10 @@ class _HomePageState extends State<HomePage> {
         children: [
           const Text(
             'Số dư hiện tại',
-            style: TextStyle(color: Colors.white70, fontSize: 14),
+            style: TextStyle(
+              color: Color.fromARGB(179, 62, 62, 62),
+              fontSize: 14,
+            ),
           ),
           const SizedBox(height: 8),
           Text(
@@ -122,7 +148,7 @@ class _HomePageState extends State<HomePage> {
                   'Thu nhập',
                   '₫${_formatCurrency(totalIncome)}',
                   Icons.arrow_upward,
-                  Colors.green.shade300,
+                  const Color.fromARGB(255, 0, 175, 9),
                 ),
               ),
               const SizedBox(width: 16),
@@ -162,7 +188,10 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(width: 4),
               Text(
                 label,
-                style: const TextStyle(color: Colors.white70, fontSize: 12),
+                style: const TextStyle(
+                  color: Color.fromARGB(179, 121, 121, 121),
+                  fontSize: 12,
+                ),
               ),
             ],
           ),
@@ -279,6 +308,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildRecentTransactions(BuildContext context) {
+    final provider = Provider.of<TransactionProvider>(context, listen: false);
+
+    // Lấy 3 giao dịch gần nhất
+    final recentTransactions = provider.transactions.take(3).toList();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -307,24 +341,31 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         const SizedBox(height: 12),
-        _buildTransactionItem(
-          'Ăn sáng',
-          'Cà phê Highlands',
-          '-₫85,000',
-          Icons.restaurant,
-        ),
-        _buildTransactionItem(
-          'Lương tháng 10',
-          'Công ty ABC',
-          '+₫15,000,000',
-          Icons.work,
-        ),
-        _buildTransactionItem(
-          'Xăng xe',
-          'Petrolimex',
-          '-₫450,000',
-          Icons.local_gas_station,
-        ),
+        // Hiển thị giao dịch thực từ provider
+        if (recentTransactions.isEmpty)
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Text(
+                'Chưa có giao dịch nào',
+                style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+              ),
+            ),
+          )
+        else
+          ...recentTransactions.map((transaction) {
+            final isIncome = transaction.isIncome;
+            final formattedAmount = isIncome
+                ? '+₫${_formatCurrency(transaction.amount)}'
+                : '-₫${_formatCurrency(transaction.amount)}';
+
+            return _buildTransactionItem(
+              transaction.category,
+              transaction.description,
+              formattedAmount,
+              _getIconData(transaction.icon),
+            );
+          }),
       ],
     );
   }
