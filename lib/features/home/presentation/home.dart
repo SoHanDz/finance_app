@@ -235,7 +235,7 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(width: 12),
             Expanded(
               child: _buildQuickActionCard(
-                'Xem báo cáo',
+                'Báo cáo',
                 Icons.analytics_outlined,
                 const Color(0xFF4285F4),
                 () {
@@ -246,7 +246,7 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(width: 12),
             Expanded(
               child: _buildQuickActionCard(
-                'Đặt mục tiêu',
+                'Mục tiêu',
                 Icons.flag_outlined,
                 const Color(0xFFFF9800),
                 () {

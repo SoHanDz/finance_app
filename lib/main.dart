@@ -9,14 +9,19 @@ import 'features/transactions/presentation/providers/transaction_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    name: 'name-here',
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  // Sign in anonymously nếu chưa có user
-  if (FirebaseAuth.instance.currentUser == null) {
-    await FirebaseAuth.instance.signInAnonymously();
+  try {
+    await Firebase.initializeApp(
+      name: 'name-here',
+      options: DefaultFirebaseOptions.currentPlatform,
+    ).timeout(
+      const Duration(seconds: 10),
+      onTimeout: () {
+        print('Firebase initialization timeout');
+        throw Exception('Firebase timeout');
+      },
+    );
+  } catch (e) {
+    print('Firebase error: $e');
   }
 
   runApp(const MyApp());
@@ -28,11 +33,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (_) => TransactionProvider(),
-        ),
-      ],
+      providers: [ChangeNotifierProvider(create: (_) => TransactionProvider())],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Finance Manager',
